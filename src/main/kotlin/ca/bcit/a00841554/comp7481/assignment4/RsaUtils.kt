@@ -125,69 +125,16 @@ class RsaUtils
             .filter {Math.max(it.first,it.second) < e}
             .filter {(it.first-1)*(it.second-1) > e}
             .filter {isCoprime((it.first-1)*(it.second-1),e)}
-        val results = LinkedBlockingQueue<DComputation>()
-        val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()) as ThreadPoolExecutor
-        @Suppress("JoinDeclarationAndAssignment")
-        var findD:(p:Long,q:Long,totient:Long,d:Long,e:Long)->Unit
-        findD = fun(p:Long,q:Long,totient:Long,d:Long,e:Long):Unit {}
-        findD = fun(p:Long,q:Long,totient:Long,d:Long,e:Long):Unit
-        {
-            val ds = d..d+100000
-            val foundD = ds.any()
-            {
-                d ->
-                if (!isCoprime(e,d)) return@any false
-                if (e*d%totient == 1L)
-                {
-                    results.put(DComputation(p,q,totient,d))
-                    true
-                }
-                else
-                {
-                    false
-                }
-            }
-            if (!foundD)
-            {
-                try
-                {
-                    threadPool.execute {findD(p,q,totient,ds.last+1,e)}
-                }
-                catch (ex:RejectedExecutionException)
-                {
-                    return
-                }
-            }
-        }
 
-        tentativeTotients.forEach()
+        return tentativeTotients.map()
         {
-            val d = 1L
-            threadPool.execute()
-            {
-                findD(it.first,it.second,(it.first-1)*(it.second-1),d,e)
-            }
+            val p = it.first
+            val q = it.second
+            val totient = (it.first-1)*(it.second-1)
+            val d = computeEuclidExts(e,totient).last().y
+                .let {d -> if (d < 0) d+totient else d}
+            DComputation(p,q,totient,d)
         }
-
-        val runnable = object:Runnable
-        {
-            override fun run()
-            {
-                if (threadPool.queue.size == 0 && threadPool.activeCount == 1)
-                {
-                    threadPool.shutdown()
-                }
-                else
-                {
-                    try { threadPool.execute(this) }
-                    catch (ex:RejectedExecutionException) { return }
-                }
-            }
-        }
-        threadPool.execute(runnable)
-
-        threadPool.awaitTermination(Long.MAX_VALUE,TimeUnit.DAYS)
-        return results.toList()
     }
 
     data class DComputation(val p:Long,val q:Long,val totient:Long,val d:Long)

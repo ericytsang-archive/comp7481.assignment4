@@ -41,10 +41,10 @@ class Assignment
 
     private fun computeD(e:Long,n:Long)
     {
-        var computationResult:List<RsaUtils.DComputation>? = null
-        val timeElapsed = measureTimeMillis {
-            computationResult = RsaUtils().computeD(e,n)
-        }
+        val computationResult:List<RsaUtils.DComputation> = RsaUtils().computeD(e,n)
+        val timeElapsed = (1..10)
+            .map {measureTimeMillis {RsaUtils().computeD(e,n)}}
+            .average()
         println("($e, $n): $computationResult in $timeElapsed ms")
     }
 

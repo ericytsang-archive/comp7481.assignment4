@@ -9,21 +9,34 @@ class Assignment
     @Test
     fun _1a()
     {
-        println(RsaUtils().computePrimeFactors(187))
-        println(RsaUtils().computePrimeFactors(2173))
-        println(RsaUtils().computePrimeFactors(4))
-        println(RsaUtils().computePrimeFactors(85273))
-        println(RsaUtils().computePrimeFactors(32559))
+        compute1AInstance(187)
+        compute1AInstance(2173)
+        compute1AInstance(4)
+        compute1AInstance(85273)
+        compute1AInstance(32559)
+    }
+
+    private fun compute1AInstance(product:Long)
+    {
+        val primeFactors = RsaUtils().computePrimeFactors(product)
+        println("($product): $primeFactors")
     }
 
     @Test
     fun _1b()
     {
-        println(RsaUtils().computeEuclidExts(5,221).last().y)
-        println(RsaUtils().computeEuclidExts(17,3937).last().y)
-        println(RsaUtils().computeEuclidExts(3,437).last().y)
-        println(RsaUtils().computeEuclidExts(101,34524).last().y)
-        println(RsaUtils().computeEuclidExts(107,89565).last().y)
+        compute1BInstance(5,221)
+        compute1BInstance(17,3937)
+        compute1BInstance(3,437)
+        compute1BInstance(101,34524)
+        compute1BInstance(107,89565)
+    }
+
+    private fun compute1BInstance(e:Long,totient:Long)
+    {
+        var d = RsaUtils().computeEuclidExts(5,221).last().y
+        if (d < 0) d += totient
+        println("($e, $totient): $d")
     }
 
     @Test
@@ -32,14 +45,14 @@ class Assignment
         measureTimeMillis {RsaUtils().computeD(623,2173)}
         measureTimeMillis {RsaUtils().computeD(623,2173)}
         measureTimeMillis {RsaUtils().computeD(623,2173)}
-        computeD(623,2173)
-        computeD(17,55)
-        computeD(3,55)
-        computeD(70619,85273)
-        computeD(14683,32559)
+        compute1CInstance(623,2173)
+        compute1CInstance(17,55)
+        compute1CInstance(3,55)
+        compute1CInstance(70619,85273)
+        compute1CInstance(14683,32559)
     }
 
-    private fun computeD(e:Long,n:Long)
+    private fun compute1CInstance(e:Long,n:Long)
     {
         val computationResult:List<RsaUtils.DComputation> = RsaUtils().computeD(e,n)
         val timeElapsed = (1..10)
@@ -51,7 +64,7 @@ class Assignment
     @Test
     fun _2()
     {
-        println(RsaUtils().computeEuclids(7,160))
-        println(RsaUtils().computeEuclidExts(7,160))
+        println(RsaUtils().computeEuclids(7,160).joinToString("\n"))
+        println(RsaUtils().computeEuclidExts(7,160).joinToString("\n"))
     }
 }

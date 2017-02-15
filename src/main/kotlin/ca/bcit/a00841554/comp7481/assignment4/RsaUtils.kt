@@ -122,8 +122,6 @@ class RsaUtils
     {
         require(isCoprime(e,n))
         val tentativeTotients = computeCoprimes(n)
-            .filter {Math.max(it.first,it.second) < e}
-            .filter {(it.first-1)*(it.second-1) > e}
             .filter {isCoprime((it.first-1)*(it.second-1),e)}
 
         return tentativeTotients.map()

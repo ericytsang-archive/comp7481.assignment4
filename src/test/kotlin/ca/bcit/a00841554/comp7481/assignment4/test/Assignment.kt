@@ -51,6 +51,7 @@ class Assignment
     @Test
     fun _2()
     {
-        println(RsaUtils().computeEuclidExts(7,160).last())
+        println(RsaUtils().computeEuclids(7,160))
+        println(RsaUtils().computeEuclidExts(7,160))
     }
 }
